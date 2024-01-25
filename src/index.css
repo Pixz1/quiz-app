@@ -1,0 +1,17 @@
+*
+{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+:root
+{
+    --colour-primary: #111827;
+    --colour-secondary: #336699;
+}
+
+body
+{
+    height: 100vh;
+    background-color: var(--colour-secondary);
+}

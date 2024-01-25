@@ -1,0 +1,28 @@
+.navbar-container
+{
+    background-color: var(--colour-primary);
+}
+.nav-items .nav-link 
+{
+    color: white;
+    position: relative;
+    display: inline-block;
+}
+.nav-items .nav-link::after 
+{
+    content: '';
+    position: absolute;
+    height: 2px;
+    background: var(--colour-secondary);
+    transition: width 0.3s;
+    bottom: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.nav-items .nav-link:hover
+{
+    color: var(--colour-secondary);
+}
+.nav-items .nav-link:hover::after {
+    width: 85%;
+}
