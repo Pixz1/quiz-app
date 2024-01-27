@@ -6,32 +6,77 @@
 {
     width: 700px;
     margin: auto;
-    margin-top: 150px;
-    background: white;
-    color: #262626;
+    margin-top: 12.5em;
+    background: var(--colour-primary);
+    color: white;
     display: flex;
     flex-direction: column;
     gap: 20px;
     border-radius: 10px;
     padding: 40px 50px;
+    text-align: center;
 }
-@media (max-width: 700px)
+@media (max-width: 900px)
 {
     .quiz
     {
-        margin-top: 100px;
-        padding: 35px 25px;
+        margin-top: 50px;
+        padding: 30px 15px;
     }
 }
 .divider
 {
     border: none;
     height: 2px;
-    color: #000000;
-    background-color: #000000;
+    color: white;
+    background-color: white;
     margin: 0;
 }
 .heading
 {
     font-weight: bold;
+}
+p, h1, h2
+{
+    margin-bottom: 0;
+}
+.timer, .add-time-btn, .hint-btn, .prev-btn, .submit-btn, .next-btn
+{
+    background-color: var(--colour-secondary);
+    width: 6.5em;
+    border-radius: 1.8em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5em 1.3em;
+    color: white;
+}
+.add-time-btn
+{
+    width: 2em;
+}
+.progress-bar
+{
+    background-color: var(--colour-secondary);
+}
+.hint-btn, .prev-btn, .submit-btn, .next-btn
+{
+    padding: 0.3em 0.5em;
+}
+.add-time-btn, .hint-btn, .prev-btn, .submit-btn, .next-btn
+{
+    border-color: var(--colour-secondary);
+}
+.add-time-btn:hover, .hint-btn:hover, .prev-btn:hover, .submit-btn:hover, .next-btn:hover
+{
+    background-color: var(--colour-secondary);
+    border-color: white;
+}
+.add-time-btn:active, .hint-btn:active, .prev-btn:active, .submit-btn:active, .next-btn:active
+{
+    background-color: var(--colour-secondary) !important;
+}
+span
+{
+    padding-bottom: 1px;
 }
