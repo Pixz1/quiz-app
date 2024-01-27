@@ -14,6 +14,7 @@ export default function Quiz()
     const quizUrl = 'https://opentdb.com/api.php?amount=5&type=multiple';
     const [quiz, setQuiz] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
     // function to combine incorrect and correct answer into one
     async function combineAnswers(incorrectAnswers, correctAnswer)
@@ -64,7 +65,18 @@ export default function Quiz()
             .replace(/&quot;/g, "\"")
             .replace(/&rsquo;/g, "'")
             .replace(/&#039;/g, "'")
+            .replace(/&eacute;/g, "é")
             .replace(/&amp;/g, "&");
+    }
+
+    //handles prev and next question button function
+    function handlePrevQuestion()
+    {
+        setCurrentQuestionIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+    }
+    function handleNextQuestion()
+    {
+        setCurrentQuestionIndex((prevIndex) => Math.min(prevIndex + 1, quiz.length - 1));
     }
 
     return (
@@ -83,18 +95,18 @@ export default function Quiz()
                     quiz && quiz.length > 0 ? 
                     (
                         <>
-                            <p>Category: {quiz[0].category} | Difficulty: {quiz[0].difficulty}</p>
+                            <p>Category - {quiz[currentQuestionIndex].category} | Difficulty: {quiz[currentQuestionIndex].difficulty}</p>
                             <Row className='align-items-center'>
                                 <Col xs={3} sm={2}>
                                     <p>Progress:</p>
                                 </Col>
                                 <Col xs={9} sm={10}>
-                                    <ProgressBar now={40} label={`${2}/${5}`}/>
+                                    <ProgressBar now={(currentQuestionIndex + 1) * 20} label={`${currentQuestionIndex + 1}/${quiz.length}`}/>
                                 </Col>
                             </Row>
                             <Row className='align-items-center'>
                                 <Col xs={6} md={8} className='text-start'>
-                                    <p>1 of 5 questions</p>
+                                    <p>{currentQuestionIndex + 1} of {quiz.length} questions</p>
                                 </Col>
                                 <Col xs={6} md={4}>
                                     <Container className="d-flex justify-content-end align-items-center">
@@ -116,7 +128,7 @@ export default function Quiz()
                                 </Col>
                             </Row>
                             <hr className='divider'/> 
-                            <h2 className='heading'>Q. {removeCharacters(quiz[0].question)}</h2>
+                            <h2 className='heading'>Q. {removeCharacters(quiz[currentQuestionIndex].question)}</h2>
                             <Row className='align-items-center'>
                                 <Col xs={6} className='text-end'>
                                     <p>3/3 hints remaining</p>
@@ -133,14 +145,14 @@ export default function Quiz()
                                     </Button>
                                 </Col>
                             </Row>
-                            <Button variant='outline-light'>{quiz[0].answers[0]}</Button>{' '}
-                            <Button variant='outline-light'>{quiz[0].answers[1]}</Button>{' '}
-                            <Button variant='outline-light'>{quiz[0].answers[2]}</Button>{' '}
-                            <Button variant='outline-light'>{quiz[0].answers[3]}</Button>{' '}
+                            <Button variant='outline-light'>{quiz[currentQuestionIndex].answers[0]}</Button>{' '}
+                            <Button variant='outline-light'>{quiz[currentQuestionIndex].answers[1]}</Button>{' '}
+                            <Button variant='outline-light'>{quiz[currentQuestionIndex].answers[2]}</Button>{' '}
+                            <Button variant='outline-light'>{quiz[currentQuestionIndex].answers[3]}</Button>{' '}
                             <hr className='divider'/>  
                             <Row className='align-items-center'>
                                 <Col xs={4} className='d-flex justify-content-end'>
-                                    <Button className='prev-btn'>
+                                    <Button className='prev-btn' onClick={handlePrevQuestion}>
                                         <img 
                                             src='/img/prev.png'
                                             alt='prev-icon'
@@ -156,7 +168,7 @@ export default function Quiz()
                                     </Button>
                                 </Col>
                                 <Col xs={4} className='d-flex justify-content-start'>
-                                    <Button className='next-btn'>
+                                    <Button className='next-btn' onClick={handleNextQuestion}>
                                         <span style={{ paddingRight: '5px' }}>Next</span>
                                         <img 
                                             src='/img/next.png'
