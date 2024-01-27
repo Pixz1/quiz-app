@@ -15,6 +15,7 @@ export default function Quiz()
     const [quiz, setQuiz] = useState(null);
     const [loading, setLoading] = useState(false);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [showQuiz, setShowQuiz] = useState(false);
 
     // function to combine incorrect and correct answer into one
     async function combineAnswers(incorrectAnswers, correctAnswer)
@@ -69,7 +70,7 @@ export default function Quiz()
             .replace(/&amp;/g, "&");
     }
 
-    //handles prev and next question button function
+    // handles prev and next question button function
     function handlePrevQuestion()
     {
         setCurrentQuestionIndex((prevIndex) => Math.max(prevIndex - 1, 0));
@@ -79,23 +80,36 @@ export default function Quiz()
         setCurrentQuestionIndex((prevIndex) => Math.min(prevIndex + 1, quiz.length - 1));
     }
 
+    // handles show quiz
+    function handleShowQuiz()
+    {
+        setShowQuiz(true);
+    }
+
     return (
         <Container className="quiz-container">
             <Container className='quiz'>
                 <h1 className='heading'>Quizzy Time</h1>
                 <hr className='divider'/>      
                 {loading ? 
+                // loading = true, show this
                 (
                     <Container>
-                        <h1>Loading...</h1>
+                        <h1 style={{ paddingBottom: '1em'}}>Loading...</h1>
                         <Spinner animation='border' variant='light'/>
                     </Container>
                 ) : 
-                (
-                    quiz && quiz.length > 0 ? 
+                // loading = false, show this
+                (   
+                    showQuiz ? 
+                    // quiz = true, show this
                     (
+                        quiz && quiz.length > 0 ? 
+                        (
                         <>
                             <p>Category - {quiz[currentQuestionIndex].category} | Difficulty: {quiz[currentQuestionIndex].difficulty}</p>
+
+                            {/* progress bar section */}
                             <Row className='align-items-center'>
                                 <Col xs={3} sm={2}>
                                     <p>Progress:</p>
@@ -104,6 +118,8 @@ export default function Quiz()
                                     <ProgressBar now={(currentQuestionIndex + 1) * 20} label={`${currentQuestionIndex + 1}/${quiz.length}`}/>
                                 </Col>
                             </Row>
+
+                            {/* display number of questions and timer section */}
                             <Row className='align-items-center'>
                                 <Col xs={6} md={8} className='text-start'>
                                     <p>{currentQuestionIndex + 1} of {quiz.length} questions</p>
@@ -129,6 +145,8 @@ export default function Quiz()
                             </Row>
                             <hr className='divider'/> 
                             <h2 className='heading'>Q. {removeCharacters(quiz[currentQuestionIndex].question)}</h2>
+
+                            {/* display hint section */}
                             <Row className='align-items-center'>
                                 <Col xs={6} className='text-end'>
                                     <p>3/3 hints remaining</p>
@@ -145,11 +163,18 @@ export default function Quiz()
                                     </Button>
                                 </Col>
                             </Row>
-                            <Button variant='outline-light'>{quiz[currentQuestionIndex].answers[0]}</Button>{' '}
-                            <Button variant='outline-light'>{quiz[currentQuestionIndex].answers[1]}</Button>{' '}
-                            <Button variant='outline-light'>{quiz[currentQuestionIndex].answers[2]}</Button>{' '}
-                            <Button variant='outline-light'>{quiz[currentQuestionIndex].answers[3]}</Button>{' '}
+
+                            {/* display all quiz answer section */}
+                            {quiz[currentQuestionIndex].answers.map((answer, index) => 
+                            (
+                                <Button key={index} variant='outline-light'>
+                                    {answer}
+                                </Button>
+                            ))}
+
                             <hr className='divider'/>  
+
+                            {/* question cycling and submit quiz section */}
                             <Row className='align-items-center'>
                                 <Col xs={4} className='d-flex justify-content-end'>
                                     <Button className='prev-btn' onClick={handlePrevQuestion}>
@@ -180,8 +205,20 @@ export default function Quiz()
                                 </Col>
                             </Row> 
                         </>
+                        ) :
+                        ( <h1>No quiz data available.</h1> )
                     ) :
-                    ( <h1>No quiz data available.</h1> )
+                    // quiz = false, show this
+                    (
+                        <Container>        
+                            <Row style={{ paddingBottom: '2em'}}>
+                                <h2>Are you ready?</h2>                          
+                            </Row>   
+                            <Row className='justify-content-center'>
+                                <Button className='start-btn' onClick={handleShowQuiz}>Start Quiz</Button>                    
+                            </Row>                 
+                        </Container>
+                    )
                 )}     
             </Container>               
         </Container>
