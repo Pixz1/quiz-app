@@ -114,6 +114,21 @@ export default function Quiz()
         }
     }
 
+    // handle score calculation
+    function calculateScore()
+    {
+        let score = 0;
+        quiz.forEach((question, index) =>
+        {
+            if (question.correct_answer === question.answers[selectedAnswer[index]])
+            {
+                score += 1;
+            }
+        });
+        
+        return score;
+    }
+
     return (
         <Container className="quiz-container">
             <Container className='quiz'>
@@ -133,7 +148,32 @@ export default function Quiz()
                     // results = true, show this
                     (
                         <Container>
-                            <h1>show results</h1>
+                            <Row>
+                                <h2 style={{ paddingBottom: '1em' }}>Your quiz results</h2>                            
+                            </Row>
+                            {quiz.map((question, index) =>
+                            (
+                                <Row key={index} style={{ marginBottom: '1em' }}>
+                                    <h4 style={{ textAlign: 'left' }}>
+                                        Q{index + 1}. {removeCharacters(question.question)}
+                                    </h4>
+                                    <Col>
+                                        <p>Correct Answer: {question.correct_answer}</p>
+                                    </Col>
+                                    <Col>
+                                        <p>Your Answer: {question.answers[selectedAnswer[index]]}</p>
+                                    </Col>
+                                </Row>
+                            ))}
+                            <hr className='divider'/>
+                            <Row>
+                                <h2 style={{ paddingTop: '1em', paddingBottom: '1em' }}>
+                                    Total Score: {calculateScore()} out of {quiz.length}
+                                </h2>
+                                <Button className='another-btn'>
+                                    Start Another Quiz
+                                </Button>
+                            </Row>
                         </Container>
                     ) :
                     // results = false, show this
