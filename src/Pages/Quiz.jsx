@@ -16,6 +16,7 @@ export default function Quiz()
     const [loading, setLoading] = useState(false);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [showQuiz, setShowQuiz] = useState(false);
+    const [selectedAnswer, setSelectedAnswer] = useState({});
 
     // function to combine incorrect and correct answer into one
     async function combineAnswers(incorrectAnswers, correctAnswer)
@@ -86,6 +87,16 @@ export default function Quiz()
         setShowQuiz(true);
     }
 
+    // handles selected answers
+    function handleAnswerSelection(answerIndex)
+    {
+        setSelectedAnswer(prevSelected =>
+        ({
+            ...prevSelected,
+            [currentQuestionIndex]: answerIndex
+        }));
+    }
+
     return (
         <Container className="quiz-container">
             <Container className='quiz'>
@@ -115,14 +126,15 @@ export default function Quiz()
                                     <p>Progress:</p>
                                 </Col>
                                 <Col xs={9} sm={10}>
-                                    <ProgressBar now={(currentQuestionIndex + 1) * 20} label={`${currentQuestionIndex + 1}/${quiz.length}`}/>
+                                    <ProgressBar now={Object.keys(selectedAnswer).length / quiz.length * 100} 
+                                    label={`${Object.keys(selectedAnswer).length}/${quiz.length}`}/>
                                 </Col>
                             </Row>
 
                             {/* display number of questions and timer section */}
                             <Row className='align-items-center'>
                                 <Col xs={6} md={8} className='text-start'>
-                                    <p>{currentQuestionIndex + 1} of {quiz.length} questions</p>
+                                    <p>Total of {quiz.length} questions</p>
                                 </Col>
                                 <Col xs={6} md={4}>
                                     <Container className="d-flex justify-content-end align-items-center">
@@ -144,7 +156,7 @@ export default function Quiz()
                                 </Col>
                             </Row>
                             <hr className='divider'/> 
-                            <h2 className='heading'>Q. {removeCharacters(quiz[currentQuestionIndex].question)}</h2>
+                            <h2 className='heading'>Q{currentQuestionIndex + 1}. {removeCharacters(quiz[currentQuestionIndex].question)}</h2>
 
                             {/* display hint section */}
                             <Row className='align-items-center'>
@@ -167,7 +179,10 @@ export default function Quiz()
                             {/* display all quiz answer section */}
                             {quiz[currentQuestionIndex].answers.map((answer, index) => 
                             (
-                                <Button key={index} variant='outline-light'>
+                                <Button 
+                                    key={index} 
+                                    variant={selectedAnswer[currentQuestionIndex] === index ? 'light' : 'outline-light'}
+                                    onClick={() => handleAnswerSelection(index)}>
                                     {answer}
                                 </Button>
                             ))}
