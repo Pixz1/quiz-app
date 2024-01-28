@@ -5,6 +5,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Alert from 'react-bootstrap/Alert';
 import { useState, useEffect } from 'react';
 
 
@@ -17,6 +18,8 @@ export default function Quiz()
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [showQuiz, setShowQuiz] = useState(false);
     const [selectedAnswer, setSelectedAnswer] = useState({});
+    const [showResults, setShowResults] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
 
     // function to combine incorrect and correct answer into one
     async function combineAnswers(incorrectAnswers, correctAnswer)
@@ -97,6 +100,20 @@ export default function Quiz()
         }));
     }
 
+    // handles submit funciton
+    function submitQuiz()
+    {   
+        if (Object.keys(selectedAnswer).length === quiz.length)
+        {
+            setShowResults(true);
+            setShowAlert(false);
+        }
+        else
+        {
+            setShowAlert(true);
+        }
+    }
+
     return (
         <Container className="quiz-container">
             <Container className='quiz'>
@@ -112,127 +129,148 @@ export default function Quiz()
                 ) : 
                 // loading = false, show this
                 (   
-                    showQuiz ? 
-                    // quiz = true, show this
+                    showResults ?
+                    // results = true, show this
                     (
-                        quiz && quiz.length > 0 ? 
+                        <Container>
+                            <h1>show results</h1>
+                        </Container>
+                    ) :
+                    // results = false, show this
+                    (
+                        showQuiz ? 
+                        // quiz = true, show this
                         (
-                        <>
-                            <p>Category - {quiz[currentQuestionIndex].category} | Difficulty: {quiz[currentQuestionIndex].difficulty}</p>
-
-                            {/* progress bar section */}
-                            <Row className='align-items-center'>
-                                <Col xs={3} sm={2}>
-                                    <p>Progress:</p>
-                                </Col>
-                                <Col xs={9} sm={10}>
-                                    <ProgressBar now={Object.keys(selectedAnswer).length / quiz.length * 100} 
-                                    label={`${Object.keys(selectedAnswer).length}/${quiz.length}`}/>
-                                </Col>
-                            </Row>
-
-                            {/* display number of questions and timer section */}
-                            <Row className='align-items-center'>
-                                <Col xs={6} md={8} className='text-start'>
-                                    <p>Total of {quiz.length} questions</p>
-                                </Col>
-                                <Col xs={6} md={4}>
-                                    <Container className="d-flex justify-content-end align-items-center">
-                                        <Container className="timer d-inline-flex align-items-center">
-                                            <img 
-                                                src="/img/timer.png"
-                                                alt='timer-icon'
-                                            />
-                                            <span>10s</span>
+                            quiz && quiz.length > 0 ? 
+                            // if quiz = true and length is more than 0
+                            (
+                            <>
+                                <p>Category - {quiz[currentQuestionIndex].category} | Difficulty: {quiz[currentQuestionIndex].difficulty}</p>
+    
+                                {/* progress bar section */}
+                                <Row className='align-items-center'>
+                                    <Col xs={3} sm={2}>
+                                        <p>Progress:</p>
+                                    </Col>
+                                    <Col xs={9} sm={10}>
+                                        <ProgressBar now={Object.keys(selectedAnswer).length / quiz.length * 100} 
+                                        label={`${Object.keys(selectedAnswer).length}/${quiz.length}`}/>
+                                    </Col>
+                                </Row>
+    
+                                {/* display number of questions and timer section */}
+                                <Row className='align-items-center'>
+                                    <Col xs={6} md={8} className='text-start'>
+                                        <p>Total of {quiz.length} questions</p>
+                                    </Col>
+                                    <Col xs={6} md={4}>
+                                        <Container className="d-flex justify-content-end align-items-center">
+                                            <Container className="timer d-inline-flex align-items-center">
+                                                <img 
+                                                    src="/img/timer.png"
+                                                    alt='timer-icon'
+                                                />
+                                                <span>10s</span>
+                                            </Container>
+                                            <Button className='add-time-btn'>
+                                                <img src='/img/add.png'
+                                                    alt='add-more-time'
+                                                    width='24'
+                                                    height='24'
+                                                />
+                                            </Button>
                                         </Container>
-                                        <Button className='add-time-btn'>
-                                            <img src='/img/add.png'
-                                                alt='add-more-time'
-                                                width='24'
+                                    </Col>
+                                </Row>
+                                <hr className='divider'/> 
+                                <h2 className='heading'>Q{currentQuestionIndex + 1}. {removeCharacters(quiz[currentQuestionIndex].question)}</h2>
+    
+                                {/* display hint section */}
+                                <Row className='align-items-center'>
+                                    <Col xs={6} className='text-end'>
+                                        <p>3/3 hints remaining</p>
+                                    </Col>
+                                    <Col xs={6}>
+                                        <Button className='hint-btn'>
+                                            <img 
+                                                src='/img/hint.png'
+                                                alt='hint-icon'
                                                 height='24'
+                                                width='24'
+                                            />
+                                            <span style={{ paddingLeft: '5px' }}>Hints</span>
+                                        </Button>
+                                    </Col>
+                                </Row>
+    
+                                {/* display all quiz answer section */}
+                                {quiz[currentQuestionIndex].answers.map((answer, index) => 
+                                (
+                                    <Button 
+                                        key={index} 
+                                        variant={selectedAnswer[currentQuestionIndex] === index ? 'light' : 'outline-light'}
+                                        onClick={() => handleAnswerSelection(index)}>
+                                        {answer}
+                                    </Button>
+                                ))}
+    
+                                <hr className='divider'/>  
+    
+                                {/* question cycling and submit quiz section */}
+                                <Row className='align-items-center'>
+                                    <Col xs={4} className='d-flex justify-content-end'>
+                                        <Button className='prev-btn' onClick={handlePrevQuestion}>
+                                            <img 
+                                                src='/img/prev.png'
+                                                alt='prev-icon'
+                                                height='24'
+                                                width='24'
+                                            />
+                                            <span style={{ paddingLeft: '5px' }}>Prev</span>   
+                                        </Button>
+                                    </Col>
+                                    <Col xs={4} className='d-flex justify-content-center'>
+                                        <Button className='submit-btn' onClick={submitQuiz}>
+                                            Submit
+                                        </Button>
+                                    </Col>
+                                    <Col xs={4} className='d-flex justify-content-start'>
+                                        <Button className='next-btn' onClick={handleNextQuestion}>
+                                            <span style={{ paddingRight: '5px' }}>Next</span>
+                                            <img 
+                                                src='/img/next.png'
+                                                alt='next-icon'
+                                                height='24'
+                                                width='24'
                                             />
                                         </Button>
-                                    </Container>
-                                </Col>
-                            </Row>
-                            <hr className='divider'/> 
-                            <h2 className='heading'>Q{currentQuestionIndex + 1}. {removeCharacters(quiz[currentQuestionIndex].question)}</h2>
-
-                            {/* display hint section */}
-                            <Row className='align-items-center'>
-                                <Col xs={6} className='text-end'>
-                                    <p>3/3 hints remaining</p>
-                                </Col>
-                                <Col xs={6}>
-                                    <Button className='hint-btn'>
-                                        <img 
-                                            src='/img/hint.png'
-                                            alt='hint-icon'
-                                            height='24'
-                                            width='24'
-                                        />
-                                        <span style={{ paddingLeft: '5px' }}>Hints</span>
-                                    </Button>
-                                </Col>
-                            </Row>
-
-                            {/* display all quiz answer section */}
-                            {quiz[currentQuestionIndex].answers.map((answer, index) => 
-                            (
-                                <Button 
-                                    key={index} 
-                                    variant={selectedAnswer[currentQuestionIndex] === index ? 'light' : 'outline-light'}
-                                    onClick={() => handleAnswerSelection(index)}>
-                                    {answer}
-                                </Button>
-                            ))}
-
-                            <hr className='divider'/>  
-
-                            {/* question cycling and submit quiz section */}
-                            <Row className='align-items-center'>
-                                <Col xs={4} className='d-flex justify-content-end'>
-                                    <Button className='prev-btn' onClick={handlePrevQuestion}>
-                                        <img 
-                                            src='/img/prev.png'
-                                            alt='prev-icon'
-                                            height='24'
-                                            width='24'
-                                        />
-                                        <span style={{ paddingLeft: '5px' }}>Prev</span>   
-                                    </Button>
-                                </Col>
-                                <Col xs={4} className='d-flex justify-content-center'>
-                                    <Button className='submit-btn'>
-                                        Submit
-                                    </Button>
-                                </Col>
-                                <Col xs={4} className='d-flex justify-content-start'>
-                                    <Button className='next-btn' onClick={handleNextQuestion}>
-                                        <span style={{ paddingRight: '5px' }}>Next</span>
-                                        <img 
-                                            src='/img/next.png'
-                                            alt='next-icon'
-                                            height='24'
-                                            width='24'
-                                        />
-                                    </Button>
-                                </Col>
-                            </Row> 
-                        </>
+                                    </Col>
+                                </Row> 
+                                {showAlert &&
+                                    <Row>
+                                        <Col>
+                                            <Alert variant='warning' onClose={() => setShowAlert(false)} dismissible>
+                                                Please answer all questions before submitting the quiz.
+                                            </Alert>
+                                        </Col>
+                                    </Row>
+                                }
+                            </>
+                            ) :
+                            ( <h1>No quiz data available.</h1> )
                         ) :
-                        ( <h1>No quiz data available.</h1> )
-                    ) :
-                    // quiz = false, show this
-                    (
-                        <Container>        
-                            <Row style={{ paddingBottom: '2em'}}>
-                                <h2>Are you ready?</h2>                          
-                            </Row>   
-                            <Row className='justify-content-center'>
-                                <Button className='start-btn' onClick={handleShowQuiz}>Start Quiz</Button>                    
-                            </Row>                 
-                        </Container>
+                        // quiz = false, show this
+                        (
+                            <Container>        
+                                <Row style={{ paddingBottom: '2em'}}>
+                                    <h2>Are you ready?</h2>                          
+                                </Row>   
+                                <Row className='justify-content-center'>
+                                    <Button className='start-btn' onClick={handleShowQuiz}>Start Quiz</Button>                    
+                                </Row>                 
+                            </Container>
+                        )
+
                     )
                 )}     
             </Container>               
