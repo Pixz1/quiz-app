@@ -153,15 +153,27 @@ export default function Quiz()
                             </Row>
                             {quiz.map((question, index) =>
                             (
-                                <Row key={index} style={{ marginBottom: '1em' }}>
-                                    <h4 style={{ textAlign: 'left' }}>
-                                        Q{index + 1}. {removeCharacters(question.question)}
-                                    </h4>
+                                <Row key={index} style={{ marginBottom: '1em' }} className='align-items-center'>
+                                    <Col style={{ borderRight: '1px solid #fff' }}>
+                                        <p style={{ textAlign: 'left' }}>
+                                            Q{index + 1}. {removeCharacters(question.question)}
+                                        </p>                         
+                                    </Col>            
                                     <Col>
-                                        <p>Correct Answer: {question.correct_answer}</p>
-                                    </Col>
-                                    <Col>
-                                        <p>Your Answer: {question.answers[selectedAnswer[index]]}</p>
+                                        <Row style={{ marginBottom: '5px' }}>
+                                            <p>Correct Answer: {' '}
+                                                <span style={{ color: '#008000' }}>
+                                                    {question.correct_answer}
+                                                </span>
+                                            </p>
+                                        </Row>
+                                        <Row style={{ marginTop: '5px', borderTop: '1px solid #fff' }}>
+                                            <p>Your Answer: {' '}
+                                                <span style={{ color: question.answers[selectedAnswer[index]] === question.correct_answer ? '#008000' : '#ff0000' }}>
+                                                    {question.answers[selectedAnswer[index]]}
+                                                </span>
+                                            </p>
+                                        </Row>
                                     </Col>
                                 </Row>
                             ))}
