@@ -48,7 +48,7 @@ span
 {
     background-color: var(--colour-secondary);
 }
-.timer, .add-time-btn, .hint-btn, .prev-btn, .submit-btn, .next-btn, .start-btn
+.timer, .add-time-btn, .hint-btn, .prev-btn, .submit-btn, .next-btn, .start-btn, .another-btn
 {
     background-color: var(--colour-secondary);
     width: 6.5em;
@@ -63,7 +63,7 @@ span
 {
     width: 2em;
 }
-.start-btn
+.start-btn, .another-btn
 {
     width: 20em;
 }
@@ -71,16 +71,16 @@ span
 {
     padding: 0.3em 0.5em;
 }
-.add-time-btn, .hint-btn, .prev-btn, .submit-btn, .next-btn, .start-btn
+.add-time-btn, .hint-btn, .prev-btn, .submit-btn, .next-btn, .start-btn, .another-btn
 {
     border-color: var(--colour-secondary);
 }
-.add-time-btn:hover, .hint-btn:hover, .prev-btn:hover, .submit-btn:hover, .next-btn:hover, .start-btn:hover
+.add-time-btn:hover, .hint-btn:hover, .prev-btn:hover, .submit-btn:hover, .next-btn:hover, .start-btn:hover, .another-btn:hover
 {
     background-color: var(--colour-secondary);
     border-color: white;
 }
-.add-time-btn:active, .hint-btn:active, .prev-btn:active, .submit-btn:active, .next-btn:active, .start-btn:active
+.add-time-btn:active, .hint-btn:active, .prev-btn:active, .submit-btn:active, .next-btn:active, .start-btn:active, .another-btn:active
 {
     background-color: var(--colour-secondary) !important;
 }

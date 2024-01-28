@@ -178,11 +178,14 @@ export default function Quiz()
                                 </Row>
                             ))}
                             <hr className='divider'/>
-                            <Row>
+                            <Row className='align-items-center justify-content-center'>
                                 <h2 style={{ paddingTop: '1em', paddingBottom: '1em' }}>
                                     Total Score: {calculateScore()} out of {quiz.length}
                                 </h2>
-                                <Button className='another-btn'>
+                                <Button 
+                                    className='another-btn'
+                                    onClick={() => window.location.reload()}
+                                >
                                     Start Another Quiz
                                 </Button>
                             </Row>
