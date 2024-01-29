@@ -19,7 +19,9 @@ export default function Header()
                             className='d-inline-block align-top'
                         />
                     </Navbar.Brand>
-                    <Navbar.Toggle aria-controls='basic-navbar-nav'/>
+                    <Navbar.Toggle aria-controls='basic-navbar-nav'>
+                        <img src='/img/menu.png' alt='menu-icon' height='30px' width='30px'/>
+                    </Navbar.Toggle>
                     <Navbar.Collapse id='basic-navbar-nav'>
                         <Nav variant='underline' defaultActiveKey='/home' className='ms-auto nav-items'>
                             <Nav.Item>
