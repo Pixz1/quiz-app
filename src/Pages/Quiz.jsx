@@ -18,7 +18,7 @@ export default function Quiz()
     const [showQuiz, setShowQuiz] = useState(false);
     const [selectedAnswer, setSelectedAnswer] = useState({});
     const [showResults, setShowResults] = useState(false);
-    const [showAlert, setShowAlert] = useState(false);
+    const [showSubmitAlert, setShowSubmitAlert] = useState(false);
     const [showHints, setShowHints] = useState(false);
     const [hintsRemaining, setHintsRemaining] = useState(3);
     const [zeroHintAlert, setZeroHintAlert] = useState(false);
@@ -84,12 +84,14 @@ export default function Quiz()
         setCurrentQuestionIndex((prevIndex) => Math.max(prevIndex - 1, 0));
         setZeroHintAlert(false);
         setHintUsedAlert(false);
+        setShowSubmitAlert(false);
     }
     function handleNextQuestion()
     {
         setCurrentQuestionIndex((prevIndex) => Math.min(prevIndex + 1, quiz.length - 1));
         setZeroHintAlert(false);
         setHintUsedAlert(false);
+        setShowSubmitAlert(false);
     }
 
     // handles show quiz
@@ -114,11 +116,11 @@ export default function Quiz()
         if (Object.keys(selectedAnswer).length === quiz.length)
         {
             setShowResults(true);
-            setShowAlert(false);
+            setShowSubmitAlert(false);
         }
         else
         {
-            setShowAlert(true);
+            setShowSubmitAlert(true);
         }
     }
 
@@ -143,7 +145,7 @@ export default function Quiz()
         if (usedHints[currentQuestionIndex])
         {
             setHintUsedAlert(true);
-            setShowAlert(false);
+            setShowSubmitAlert(false);
         }
         else if (hintsRemaining > 0)
         {
@@ -328,15 +330,17 @@ export default function Quiz()
                                 {/* question cycling and submit quiz section */}
                                 <Row className='align-items-center'>
                                     <Col xs={4} className='d-flex justify-content-end'>
-                                        <Button className='prev-btn' onClick={handlePrevQuestion}>
-                                            <img 
-                                                src='/img/prev.png'
-                                                alt='prev-icon'
-                                                height='24'
-                                                width='24'
-                                            />
-                                            <span style={{ paddingLeft: '5px' }}>Prev</span>   
-                                        </Button>
+                                        {currentQuestionIndex > 0 && (
+                                            <Button className='prev-btn' onClick={handlePrevQuestion}>
+                                                <img 
+                                                    src='/img/prev.png'
+                                                    alt='prev-icon'
+                                                    height='24'
+                                                    width='24'
+                                                />
+                                                <span style={{ paddingLeft: '5px' }}>Prev</span>   
+                                            </Button>
+                                        )}
                                     </Col>
                                     <Col xs={4} className='d-flex justify-content-center'>
                                         <Button className='submit-btn' onClick={submitQuiz}>
@@ -344,21 +348,24 @@ export default function Quiz()
                                         </Button>
                                     </Col>
                                     <Col xs={4} className='d-flex justify-content-start'>
-                                        <Button className='next-btn' onClick={handleNextQuestion}>
-                                            <span style={{ paddingRight: '5px' }}>Next</span>
-                                            <img 
-                                                src='/img/next.png'
-                                                alt='next-icon'
-                                                height='24'
-                                                width='24'
-                                            />
-                                        </Button>
+                                        {currentQuestionIndex < quiz.length - 1 && 
+                                        (
+                                            <Button className='next-btn' onClick={handleNextQuestion}>
+                                                <span style={{ paddingRight: '5px' }}>Next</span>
+                                                <img 
+                                                    src='/img/next.png'
+                                                    alt='next-icon'
+                                                    height='24'
+                                                    width='24'
+                                                />
+                                            </Button>
+                                        )}
                                     </Col>
                                 </Row> 
-                                {showAlert &&
+                                {showSubmitAlert &&
                                     <Row>
                                         <Col>
-                                            <Alert variant='warning' onClose={() => setShowAlert(false)} dismissible>
+                                            <Alert variant='warning' onClose={() => setShowSubmitAlert(false)} dismissible>
                                                 Please answer all questions before submitting the quiz.
                                             </Alert>
                                         </Col>
