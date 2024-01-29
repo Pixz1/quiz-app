@@ -13,14 +13,14 @@ export default function Header()
                     <Navbar.Brand href='https://altitudecode.com.au/' target='_blank' rel='noopener noreferrer'>
                         <img
                             alt='logo'
-                            src='/img/image001.png'
+                            src={process.env.PUBLIC_URL + '/img/image001.png'}
                             width='230'
                             height='32'
                             className='d-inline-block align-top'
                         />
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls='basic-navbar-nav'>
-                        <img src='/img/menu.png' alt='menu-icon' height='30px' width='30px'/>
+                        <img src={process.env.PUBLIC_URL + '/img/menu.png'} alt='menu-icon' height='30px' width='30px'/>
                     </Navbar.Toggle>
                     <Navbar.Collapse id='basic-navbar-nav'>
                         <Nav variant='underline' defaultActiveKey='/home' className='ms-auto nav-items'>

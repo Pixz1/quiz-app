@@ -328,7 +328,7 @@ export default function Quiz()
                                                     className='add-time-btn'
                                                     onClick={ExtendTime}
                                                 >
-                                                    <img src='/img/add.png'
+                                                    <img src={process.env.PUBLIC_URL + '/img/add.png'}
                                                         alt='add-more-time'
                                                         width='24'
                                                         height='24'
@@ -337,7 +337,7 @@ export default function Quiz()
                                             </OverlayTrigger>
                                             <Container className="timer d-inline-flex align-items-center">
                                                 <img 
-                                                    src="/img/timer.png"
+                                                    src={process.env.PUBLIC_URL + '/img/timer.png'}
                                                     alt='timer-icon'
                                                 />
                                                 <span>{timer}s</span>
@@ -375,7 +375,7 @@ export default function Quiz()
                                                 onClick={handleHint}
                                             >
                                                 <img 
-                                                    src='/img/hint.png'
+                                                    src={process.env.PUBLIC_URL + '/img/hint.png'}
                                                     alt='hint-icon'
                                                     height='24'
                                                     width='24'
@@ -425,7 +425,7 @@ export default function Quiz()
                                         {currentQuestionIndex > 0 && (
                                             <Button className='prev-btn' onClick={handlePrevQuestion}>
                                                 <img 
-                                                    src='/img/prev.png'
+                                                    src={process.env.PUBLIC_URL + '/img/prev.png'}
                                                     alt='prev-icon'
                                                     height='24'
                                                     width='24'
@@ -445,7 +445,7 @@ export default function Quiz()
                                             <Button className='next-btn' onClick={handleNextQuestion}>
                                                 <span style={{ paddingRight: '5px' }}>Next</span>
                                                 <img 
-                                                    src='/img/next.png'
+                                                    src={process.env.PUBLIC_URL + '/img/next.png'}
                                                     alt='next-icon'
                                                     height='24'
                                                     width='24'
