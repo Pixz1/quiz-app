@@ -6,7 +6,10 @@ import ProgressBar from 'react-bootstrap/ProgressBar';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
-import { useState, useEffect } from 'react';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
+import Modal from 'react-bootstrap/Modal';
+import { useState, useEffect, useRef } from 'react';
 
 export default function Quiz()
 {
@@ -19,11 +22,16 @@ export default function Quiz()
     const [selectedAnswer, setSelectedAnswer] = useState({});
     const [showResults, setShowResults] = useState(false);
     const [showSubmitAlert, setShowSubmitAlert] = useState(false);
+    // hints
     const [showHints, setShowHints] = useState(false);
     const [hintsRemaining, setHintsRemaining] = useState(3);
     const [zeroHintAlert, setZeroHintAlert] = useState(false);
     const [hintUsedAlert, setHintUsedAlert] = useState(false);
     const [usedHints, setUsedHints] = useState({});
+    // timer
+    const [timer, setTimer] = useState(10);
+    const timerId = useRef(null);
+    const [showModal, setShowModal] = useState(false);
 
     // function to combine incorrect and correct answer into one
     async function combineAnswers(incorrectAnswers, correctAnswer)
@@ -95,9 +103,24 @@ export default function Quiz()
     }
 
     // handles show quiz
-    function handleShowQuiz()
+    function handleStartQuiz()
     {
         setShowQuiz(true);
+        setTimer(10);
+
+        timerId.current = setInterval(() => 
+        {
+            setTimer(prevTimer =>
+            {
+                if (prevTimer > 0) return prevTimer - 1;
+                else
+                {
+                    clearInterval(timerId.current);
+                    setShowModal(true);
+                    return 0;
+                }
+            });
+        }, 1000);
     }
 
     // handles selected answers
@@ -160,6 +183,25 @@ export default function Quiz()
             setHintUsedAlert(false);
             setZeroHintAlert(true);
         }
+    }
+
+    // clears interval id for timer when unmount.
+    useEffect(() => 
+    {
+        return () =>
+        {
+            if (timerId.current)
+            {
+                clearInterval(timerId.current);
+            }
+        };
+    }, []);
+
+    // handles view results button
+    function viewResult()
+    {
+        setShowResults(true);
+        setShowModal(false);
     }
 
     return (
@@ -234,7 +276,7 @@ export default function Quiz()
                             (
                             <>
                                 <p>Category - {quiz[currentQuestionIndex].category} | Difficulty: {quiz[currentQuestionIndex].difficulty}</p>
-    
+                                <p>Total of {quiz.length} questions | Timer limit: 150 Seconds</p>
                                 {/* progress bar section */}
                                 <Row className='align-items-center'>
                                     <Col xs={3} sm={2}>
@@ -248,25 +290,38 @@ export default function Quiz()
     
                                 {/* display number of questions and timer section */}
                                 <Row className='align-items-center'>
-                                    <Col xs={6} md={8} className='text-start'>
-                                        <p>Total of {quiz.length} questions</p>
+                                    <Col xs={6} md={8} className='text-end'>
+                                        <p>3/3 time extension remaining</p>
                                     </Col>
                                     <Col xs={6} md={4}>
                                         <Container className="d-flex justify-content-end align-items-center">
+                                            <OverlayTrigger
+                                                key={'bottom'}
+                                                placement={'bottom'}
+                                                overlay={
+                                                    <Tooltip>
+                                                        Click to <strong>add 15 seconds!</strong>
+                                                    </Tooltip>
+                                                }
+                                            >
+                                                <Button 
+                                                    className='add-time-btn'
+
+                                                >
+                                                    <img src='/img/add.png'
+                                                        alt='add-more-time'
+                                                        width='24'
+                                                        height='24'
+                                                    />
+                                                </Button>
+                                            </OverlayTrigger>
                                             <Container className="timer d-inline-flex align-items-center">
                                                 <img 
                                                     src="/img/timer.png"
                                                     alt='timer-icon'
                                                 />
-                                                <span>10s</span>
+                                                <span>{timer}s</span>
                                             </Container>
-                                            <Button className='add-time-btn'>
-                                                <img src='/img/add.png'
-                                                    alt='add-more-time'
-                                                    width='24'
-                                                    height='24'
-                                                />
-                                            </Button>
                                         </Container>
                                     </Col>
                                 </Row>
@@ -279,18 +334,28 @@ export default function Quiz()
                                         <p>{hintsRemaining}/3 hints remaining</p>
                                     </Col>
                                     <Col xs={6}>
-                                        <Button 
-                                            className='hint-btn'
-                                            onClick={handleHint}
+                                        <OverlayTrigger
+                                            key={'bottom'}
+                                            placement={'bottom'}
+                                            overlay={
+                                                <Tooltip>
+                                                    Click to <strong>display a hint!</strong>
+                                                </Tooltip>
+                                            }
                                         >
-                                            <img 
-                                                src='/img/hint.png'
-                                                alt='hint-icon'
-                                                height='24'
-                                                width='24'
-                                            />
-                                            <span style={{ paddingLeft: '5px' }}>Hints</span>
-                                        </Button>
+                                            <Button 
+                                                className='hint-btn'
+                                                onClick={handleHint}
+                                            >
+                                                <img 
+                                                    src='/img/hint.png'
+                                                    alt='hint-icon'
+                                                    height='24'
+                                                    width='24'
+                                                />
+                                                <span style={{ paddingLeft: '5px' }}>Hints</span>
+                                            </Button>
+                                        </OverlayTrigger>
                                     </Col>
                                 </Row>
                                 <Row>
@@ -382,14 +447,67 @@ export default function Quiz()
                                     <h2>Are you ready?</h2>                          
                                 </Row>   
                                 <Row className='justify-content-center'>
-                                    <Button className='start-btn' onClick={handleShowQuiz}>Start Quiz</Button>                    
+                                    <Button className='start-btn' onClick={handleStartQuiz}>Start Quiz</Button>                    
                                 </Row>                 
                             </Container>
                         )
-
                     )
                 )}     
-            </Container>               
+            </Container>    
+            <Modal
+                show={showModal}
+                backdrop="static"
+                keyboard={false}
+                centered
+            >
+                <Modal.Header 
+                    style=
+                    {{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: '#111827',
+                        color: '#fff',
+                        textAlign: 'center',
+                        borderColor: '#336699'
+                    }}
+                >
+                    <Modal.Title>Time's Up!!!</Modal.Title>
+                </Modal.Header>
+                <Modal.Body
+                    style=
+                    {{
+                        backgroundColor: '#111827',
+                        color: '#fff',
+                        textAlign: 'center'
+                    }}
+                >
+                    You have ran out of time for this quiz, better luck next time.
+                </Modal.Body>
+                <Modal.Footer
+                    style=
+                    {{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        backgroundColor: '#111827',
+                        color: '#fff',
+                        borderColor: '#336699',
+                    }}
+                >
+                    <Button
+                        className='view-results-btn'
+                        onClick={viewResult}
+                    >
+                        View Results
+                    </Button>
+                    <Button
+                        className='modal-another-btn'
+                        onClick={handleStartQuiz}
+                    >
+                        Start Another Quiz
+                    </Button>
+                </Modal.Footer>
+            </Modal>           
         </Container>
     )
 }
