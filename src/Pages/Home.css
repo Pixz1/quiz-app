@@ -1,0 +1,40 @@
+.home-container
+{
+    display: flex;
+}
+.home
+{
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 15em;
+    width: 700px;
+}
+h1
+{
+    color: white;
+}
+.get-started-btn
+{
+    background-color: var(--colour-primary);
+    width: 20em;
+    border-radius: 1.8em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5em 1em;
+    color: white;
+    margin-top: 2em;
+}
+.get-started-btn:hover
+{
+    background-color: var(--colour-primary);
+    border-color: white;
+}
+.get-started-btn:active
+{
+    background-color: var(--colour-primary) !important;
+}

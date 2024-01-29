@@ -10,7 +10,7 @@ export default function Header()
         <Container fluid className='navbar-container'>
             <Navbar expand='lg' className='navbar'>
                 <Container>
-                    <Navbar.Brand as={Link} to='/'>
+                    <Navbar.Brand href='https://altitudecode.com.au/' target='_blank' rel='noopener noreferrer'>
                         <img
                             alt='logo'
                             src='/img/image001.png'
