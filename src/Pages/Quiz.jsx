@@ -22,6 +22,7 @@ export default function Quiz()
     const [selectedAnswer, setSelectedAnswer] = useState({});
     const [showResults, setShowResults] = useState(false);
     const [showSubmitAlert, setShowSubmitAlert] = useState(false);
+    const [fetchQuiz, setFetchQuiz] = useState(0);
     // hints
     const [showHints, setShowHints] = useState(false);
     const [hintsRemaining, setHintsRemaining] = useState(3);
@@ -76,7 +77,7 @@ export default function Quiz()
         };
             
         fetchData();
-    }, []);
+    }, [fetchQuiz]);
 
     // converts html to regular characters
     function removeCharacters(question) 
@@ -224,6 +225,30 @@ export default function Quiz()
         }
     }
 
+    // handles start another quiz function
+    function startAnotherQuiz()
+    {
+        setFetchQuiz(prevKey => prevKey + 1);
+        setLoading(false);
+        setCurrentQuestionIndex(0);
+        setShowQuiz(false);
+        setSelectedAnswer({});
+        setShowResults(false);
+        setShowSubmitAlert(false);
+        setShowHints(false);
+        setHintsRemaining(3);
+        setZeroHintAlert(false);
+        setHintUsedAlert(false);
+        setUsedHints({});
+        setTimer(150);
+        if (timerId.current) {
+            clearInterval(timerId.current);
+        }
+        setShowModal(false);
+        setNoOfExtendTime(3);
+        setZeroExtendTimeAlert(false);
+    }
+
     return (
         <Container className="quiz-container">
             <Container className='quiz'>
@@ -279,7 +304,7 @@ export default function Quiz()
                                 </h2>
                                 <Button 
                                     className='another-btn'
-                                    onClick={() => window.location.reload()}
+                                    onClick={startAnotherQuiz}
                                 >
                                     Start Another Quiz
                                 </Button>
