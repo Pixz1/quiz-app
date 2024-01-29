@@ -554,7 +554,7 @@ export default function Quiz()
                     </Button>
                     <Button
                         className='modal-another-btn'
-                        onClick={() => window.location.reload()}
+                        onClick={startAnotherQuiz}
                     >
                         Start Another Quiz
                     </Button>
