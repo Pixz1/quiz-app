@@ -6,7 +6,7 @@
 {
     width: 700px;
     margin: auto;
-    margin-top: 12.5em;
+    margin-top: 10em;
     background: var(--colour-primary);
     color: white;
     display: flex;
@@ -20,7 +20,7 @@
 {
     .quiz
     {
-        margin-top: 50px;
+        margin-top: 2em;
         padding: 30px 15px;
     }
 }

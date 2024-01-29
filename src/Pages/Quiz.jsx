@@ -8,7 +8,6 @@ import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
 import { useState, useEffect } from 'react';
 
-
 export default function Quiz()
 {
     // variable setup
@@ -20,6 +19,11 @@ export default function Quiz()
     const [selectedAnswer, setSelectedAnswer] = useState({});
     const [showResults, setShowResults] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
+    const [showHints, setShowHints] = useState(false);
+    const [hintsRemaining, setHintsRemaining] = useState(3);
+    const [zeroHintAlert, setZeroHintAlert] = useState(false);
+    const [hintUsedAlert, setHintUsedAlert] = useState(false);
+    const [usedHints, setUsedHints] = useState({});
 
     // function to combine incorrect and correct answer into one
     async function combineAnswers(incorrectAnswers, correctAnswer)
@@ -78,10 +82,14 @@ export default function Quiz()
     function handlePrevQuestion()
     {
         setCurrentQuestionIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+        setZeroHintAlert(false);
+        setHintUsedAlert(false);
     }
     function handleNextQuestion()
     {
         setCurrentQuestionIndex((prevIndex) => Math.min(prevIndex + 1, quiz.length - 1));
+        setZeroHintAlert(false);
+        setHintUsedAlert(false);
     }
 
     // handles show quiz
@@ -114,7 +122,7 @@ export default function Quiz()
         }
     }
 
-    // handle score calculation
+    // handles score calculation
     function calculateScore()
     {
         let score = 0;
@@ -127,6 +135,29 @@ export default function Quiz()
         });
         
         return score;
+    }
+    
+    // handles hint display
+    function handleHint()
+    {
+        if (usedHints[currentQuestionIndex])
+        {
+            setHintUsedAlert(true);
+            setShowAlert(false);
+        }
+        else if (hintsRemaining > 0)
+        {
+            setShowHints(true);
+            setUsedHints({...usedHints, [currentQuestionIndex]: true });
+            setHintsRemaining(hintsRemaining - 1);
+            setHintUsedAlert(false);
+            setZeroHintAlert(false);
+        }
+        else
+        {
+            setHintUsedAlert(false);
+            setZeroHintAlert(true);
+        }
     }
 
     return (
@@ -243,10 +274,13 @@ export default function Quiz()
                                 {/* display hint section */}
                                 <Row className='align-items-center'>
                                     <Col xs={6} className='text-end'>
-                                        <p>3/3 hints remaining</p>
+                                        <p>{hintsRemaining}/3 hints remaining</p>
                                     </Col>
                                     <Col xs={6}>
-                                        <Button className='hint-btn'>
+                                        <Button 
+                                            className='hint-btn'
+                                            onClick={handleHint}
+                                        >
                                             <img 
                                                 src='/img/hint.png'
                                                 alt='hint-icon'
@@ -257,6 +291,26 @@ export default function Quiz()
                                         </Button>
                                     </Col>
                                 </Row>
+                                <Row>
+                                    {showHints && usedHints[currentQuestionIndex] && 
+                                    (
+                                        <p>
+                                            Hint for Question {currentQuestionIndex + 1}: Try google?
+                                        </p>
+                                    )}
+                                </Row>
+                                {zeroHintAlert &&
+                                (
+                                    <Alert variant='warning' onClose={() => setZeroHintAlert(false)} dismissible>
+                                        Out of hints!
+                                    </Alert>
+                                )}
+                                {hintUsedAlert && 
+                                (
+                                    <Alert variant='warning' onClose={() => setZeroHintAlert(false)} dismissible>
+                                        You already used a hint on this question!
+                                    </Alert>
+                                )}
     
                                 {/* display all quiz answer section */}
                                 {quiz[currentQuestionIndex].answers.map((answer, index) => 
