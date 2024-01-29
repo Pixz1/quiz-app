@@ -29,9 +29,12 @@ export default function Quiz()
     const [hintUsedAlert, setHintUsedAlert] = useState(false);
     const [usedHints, setUsedHints] = useState({});
     // timer
-    const [timer, setTimer] = useState(10);
+    const [timer, setTimer] = useState(150);
     const timerId = useRef(null);
     const [showModal, setShowModal] = useState(false);
+    const [noOfExtendTime, setNoOfExtendTime] = useState(3);
+    const [zeroExtendTimeAlert, setZeroExtendTimeAlert] = useState(false);
+
 
     // function to combine incorrect and correct answer into one
     async function combineAnswers(incorrectAnswers, correctAnswer)
@@ -93,6 +96,7 @@ export default function Quiz()
         setZeroHintAlert(false);
         setHintUsedAlert(false);
         setShowSubmitAlert(false);
+        setZeroExtendTimeAlert(false);
     }
     function handleNextQuestion()
     {
@@ -100,13 +104,14 @@ export default function Quiz()
         setZeroHintAlert(false);
         setHintUsedAlert(false);
         setShowSubmitAlert(false);
+        setZeroExtendTimeAlert(false);
     }
 
     // handles show quiz
     function handleStartQuiz()
     {
         setShowQuiz(true);
-        setTimer(10);
+        setTimer(150);
 
         timerId.current = setInterval(() => 
         {
@@ -204,6 +209,21 @@ export default function Quiz()
         setShowModal(false);
     }
 
+    // handles time extension button
+    function ExtendTime()
+    {
+        if (noOfExtendTime > 0)
+        {
+            setTimer(prevTimer => prevTimer + 15)
+            setNoOfExtendTime(noOfExtendTime - 1);
+            setZeroExtendTimeAlert(false);
+        }
+        else
+        {
+            setZeroExtendTimeAlert(true);
+        }
+    }
+
     return (
         <Container className="quiz-container">
             <Container className='quiz'>
@@ -245,7 +265,7 @@ export default function Quiz()
                                         <Row style={{ marginTop: '5px', borderTop: '1px solid #fff' }}>
                                             <p>Your Answer: {' '}
                                                 <span style={{ color: question.answers[selectedAnswer[index]] === question.correct_answer ? '#008000' : '#ff0000' }}>
-                                                    {question.answers[selectedAnswer[index]]}
+                                                    {selectedAnswer[index] !== undefined ? question.answers[selectedAnswer[index]] : 'none'}
                                                 </span>
                                             </p>
                                         </Row>
@@ -291,7 +311,7 @@ export default function Quiz()
                                 {/* display number of questions and timer section */}
                                 <Row className='align-items-center'>
                                     <Col xs={6} md={8} className='text-end'>
-                                        <p>3/3 time extension remaining</p>
+                                        <p>{noOfExtendTime}/3 time extension remaining</p>
                                     </Col>
                                     <Col xs={6} md={4}>
                                         <Container className="d-flex justify-content-end align-items-center">
@@ -306,7 +326,7 @@ export default function Quiz()
                                             >
                                                 <Button 
                                                     className='add-time-btn'
-
+                                                    onClick={ExtendTime}
                                                 >
                                                     <img src='/img/add.png'
                                                         alt='add-more-time'
@@ -325,6 +345,13 @@ export default function Quiz()
                                         </Container>
                                     </Col>
                                 </Row>
+                                {zeroExtendTimeAlert &&
+                                (
+                                    <Alert variant='warning' onClose={() => setZeroExtendTimeAlert(false)} dismissible>
+                                        Out of time extensions!
+                                    </Alert>
+                                )}
+
                                 <hr className='divider'/> 
                                 <h2 className='heading'>Q{currentQuestionIndex + 1}. {removeCharacters(quiz[currentQuestionIndex].question)}</h2>
     
@@ -502,7 +529,7 @@ export default function Quiz()
                     </Button>
                     <Button
                         className='modal-another-btn'
-                        onClick={handleStartQuiz}
+                        onClick={() => window.location.reload()}
                     >
                         Start Another Quiz
                     </Button>
