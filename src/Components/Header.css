@@ -4,7 +4,7 @@
 }
 .nav-items .nav-link 
 {
-    color: white;
+    color: var(--colour-text);
     position: relative;
     display: inline-block;
 }
@@ -25,4 +25,14 @@
 }
 .nav-items .nav-link:hover::after {
     width: 85%;
+}
+.logo
+{
+    
+}
+.logo-text
+{
+    font-size: larger;
+    font-family: 'Protest Riot', sans-serif;
+    padding-left: 0.3em;
 }

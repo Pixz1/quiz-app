@@ -10,18 +10,20 @@ export default function Header()
         <Container fluid className='navbar-container'>
             <Navbar expand='lg' className='navbar'>
                 <Container>
-                    <Navbar.Brand href='https://altitudecode.com.au/' target='_blank' rel='noopener noreferrer'>
+                    <Navbar.Brand 
+                        as={Link} to='/'
+                        className='d-flex align-items-center'
+                    >
                         <img
                             alt='logo'
-                            src={process.env.PUBLIC_URL + '/img/image001.png'}
-                            width='230'
-                            height='32'
-                            className='d-inline-block align-top'
+                            src={process.env.PUBLIC_URL + '/img/quiz.png'}
+                            width='40'
+                            height='40'
+                            className='logo'
                         />
+                        <span className='logo-text'>Quizzy Time</span>
                     </Navbar.Brand>
-                    <Navbar.Toggle aria-controls='basic-navbar-nav'>
-                        <img src={process.env.PUBLIC_URL + '/img/menu.png'} alt='menu-icon' height='30px' width='30px'/>
-                    </Navbar.Toggle>
+                    <Navbar.Toggle aria-controls='basic-navbar-nav'/>
                     <Navbar.Collapse id='basic-navbar-nav'>
                         <Nav variant='underline' defaultActiveKey='/home' className='ms-auto nav-items'>
                             <Nav.Item>

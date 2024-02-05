@@ -8,7 +8,7 @@
     margin: auto;
     margin-top: 10em;
     background: var(--colour-primary);
-    color: white;
+    color: var(--colour-text);
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -57,7 +57,7 @@ span
     align-items: center;
     justify-content: center;
     padding: 0.5em 1.3em;
-    color: white;
+    color: var(--colour-text);
 }
 .add-time-btn
 {
@@ -82,7 +82,7 @@ span
 .add-time-btn:hover, .hint-btn:hover, .prev-btn:hover, .submit-btn:hover, .next-btn:hover, .start-btn:hover, .another-btn:hover, .view-results-btn:hover, .modal-another-btn:hover
 {
     background-color: var(--colour-secondary);
-    border-color: white;
+    border-color: var(--colour-secondary);
 }
 .add-time-btn:active, .hint-btn:active, .prev-btn:active, .submit-btn:active, .next-btn:active, .start-btn:active, .another-btn:active, .view-results-btn:active, .modal-another-btn:active
 {
