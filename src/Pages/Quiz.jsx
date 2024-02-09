@@ -282,8 +282,10 @@ export default function Quiz()
                                     <Col>
                                         <Row style={{ marginBottom: '5px' }}>
                                             <p>Correct Answer: {' '}
-                                                <span style={{ color: '#008000' }}>
-                                                    {question.correct_answer}
+                                                <span>
+                                                    <strong>
+                                                        {question.correct_answer}
+                                                    </strong>
                                                 </span>
                                             </p>
                                         </Row>
@@ -336,7 +338,7 @@ export default function Quiz()
                                 {/* display number of questions and timer section */}
                                 <Row className='align-items-center'>
                                     <Col xs={6} md={8} className='text-end'>
-                                        <p>{noOfExtendTime}/3 time extension remaining</p>
+                                        <p><strong>{noOfExtendTime}/3</strong> time extension remaining</p>
                                     </Col>
                                     <Col xs={6} md={4}>
                                         <Container className="d-flex justify-content-end align-items-center">
@@ -353,19 +355,22 @@ export default function Quiz()
                                                     className='add-time-btn'
                                                     onClick={ExtendTime}
                                                 >
-                                                    <img src={process.env.PUBLIC_URL + '/img/add.png'}
+                                                    <img src={process.env.PUBLIC_URL + '/img/addtime.png'}
                                                         alt='add-more-time'
-                                                        width='24'
-                                                        height='24'
+                                                        width='25'
+                                                        height='25'
                                                     />
                                                 </Button>
                                             </OverlayTrigger>
                                             <Container className="timer d-inline-flex align-items-center">
                                                 <img 
-                                                    src={process.env.PUBLIC_URL + '/img/timer.png'}
+                                                    src={process.env.PUBLIC_URL + '/img/hourglass.png'}
                                                     alt='timer-icon'
+                                                    height='30'
+                                                    width='30'
+                                                    style={{ marginRight: '10px' }}
                                                 />
-                                                <span>{timer}s</span>
+                                                <span><strong>{timer}s</strong></span>
                                             </Container>
                                         </Container>
                                     </Col>
@@ -431,14 +436,14 @@ export default function Quiz()
                                     </Alert>
                                 )}
     
-                                {/* display all quiz answer section */}
+                                {/* display quiz answers section */}
                                 {quiz[currentQuestionIndex].answers.map((answer, index) => 
                                 (
                                     <Button 
                                         key={index} 
                                         variant={selectedAnswer[currentQuestionIndex] === index ? 'light' : 'outline-light'}
                                         onClick={() => handleAnswerSelection(index)}>
-                                        {answer}
+                                        {removeCharacters(answer)}
                                     </Button>
                                 ))}
     

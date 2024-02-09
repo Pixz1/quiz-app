@@ -47,6 +47,7 @@ span
 .progress-bar
 {
     background-color: var(--colour-secondary);
+    color: var(--colour-text);
 }
 .timer, .add-time-btn, .hint-btn, .prev-btn, .submit-btn, .next-btn, .start-btn, .another-btn, .view-results-btn, .modal-another-btn
 {
@@ -82,7 +83,8 @@ span
 .add-time-btn:hover, .hint-btn:hover, .prev-btn:hover, .submit-btn:hover, .next-btn:hover, .start-btn:hover, .another-btn:hover, .view-results-btn:hover, .modal-another-btn:hover
 {
     background-color: var(--colour-secondary);
-    border-color: var(--colour-secondary);
+    border-color: var(--colour-text);
+    color: var(--colour-text);
 }
 .add-time-btn:active, .hint-btn:active, .prev-btn:active, .submit-btn:active, .next-btn:active, .start-btn:active, .another-btn:active, .view-results-btn:active, .modal-another-btn:active
 {
